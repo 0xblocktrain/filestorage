@@ -56,8 +56,20 @@ function App() {
 					fileType?.toString(),
 					fileName?.toString()
 				);
-				await uploadTxn.wait();
+				// await uploadTxn.wait();
 				console.log(uploadTxn);
+				contract.on("FileUploaded", (fileId, fileHash, fileSize, fileType, fileName, uploadTime, uploader) => {
+					alert(`Hey there! your file has been uploaded and you can take a look at it over here: https://ipfs.io/ipfs/${fileHash}`)
+					const file_obj = {
+						id: fileId?.toString() ?? fileId,
+						hash: fileHash,
+						size: fileSize?.toString() ?? fileSize,
+						type: fileType,
+						name: fileName,
+						uploadTime: uploadTime?.toString() ?? uploadTime
+					}
+					setFiles(prev => [...prev, file_obj])
+				})
 			} catch (err) {
 				console.log(err);
 			}
